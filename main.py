@@ -7,9 +7,16 @@ from langchain_core.tools import tool
 from datetime import datetime
 from zoneinfo import ZoneInfo
 import json
+import os
+from telegram import Update
+from telegram.ext import ApplicationBuilder, MessageHandler, ContextTypes, filters
+from instruction_reschedular import clean_instructions
+
+
+
 
 load_dotenv()
-
+TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 TIMEZONE = "America/Toronto"
 PRIMARY_CALENDAR_ID = "viswa3388@gmail.com"
 
@@ -25,7 +32,6 @@ move_raw = raw["move_calendar_event"]
 delete_raw = raw["delete_calendar_event"]
 calendar_info_raw = raw["get_calendars_info"]
 current_datetime_raw = raw["get_current_datetime"]
-
 
 def clean_datetime(dt: str) -> str:
     return (
@@ -195,20 +201,54 @@ Rules:
 
 thread_config = {"configurable": {"thread_id": "1"}}
 
-while True:
-    example_query = input("Ask calendar question: ")
+# while True:
+#     example_query = input("Ask calendar question: ")
 
-    if example_query.lower() in ["exit", "quit"]:
-        break
+#     if example_query.lower() in ["exit", "quit"]:
+#         break
+
+#     try:
+#         result = agent_executor.invoke(
+#             {"messages": [("user", example_query)]}
+#         )
+
+#         print(result["messages"][-1].content)
+
+#     except Exception as e:
+#         print("ERROR:", e)
+
+#     print("---------------------------------------------------")
+
+
+async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
+    user_text = update.message.text
 
     try:
         result = agent_executor.invoke(
-            {"messages": [("user", example_query)]}
+            {
+                "messages": [
+                    ("user", clean_instructions(user_text))
+                ]
+            }
+
         )
 
-        print(result["messages"][-1].content)
+        response = result["messages"][-1].content
+
+        await update.message.reply_text(response)
 
     except Exception as e:
-        print("ERROR:", e)
+        await update.message.reply_text(f"Error: {e}")
 
-    print("---------------------------------------------------")
+app = ApplicationBuilder().token(TOKEN).build()
+
+app.add_handler(
+    MessageHandler(
+        filters.TEXT & ~filters.COMMAND,
+        handle_message
+    )
+)
+
+print("Telegram bot running...")
+app.run_polling()

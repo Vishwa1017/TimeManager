@@ -7,7 +7,7 @@ import os
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_text = update.message.text
-
+    print( f'User: {update.message.id} Vanakam Thala {user_text}')
     try:
         result = agent_executor.invoke(
             {

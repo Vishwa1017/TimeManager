@@ -1,6 +1,6 @@
 from langchain_google_community import CalendarToolkit
 from langchain_core.tools import tool
-from datetime import datetime
+from datetime import datetime, time
 from zoneinfo import ZoneInfo
 import json
 
@@ -92,7 +92,15 @@ def create_calendar_event_safe(
     }
 
     print("CREATE PAYLOAD:", payload)
-    return create_raw.invoke(payload)
+    for i in range(3):
+        try:
+            return create_raw.invoke(payload)
+        except Exception as e:
+            print(f"Attempt {i + 1} failed: {e}")
+
+            if i == 2:
+                raise
+        time.sleep(2)
 
 
 @tool

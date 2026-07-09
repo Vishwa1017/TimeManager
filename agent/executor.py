@@ -1,5 +1,6 @@
 from langchain.chat_models import init_chat_model
 from langchain.agents import create_agent
+from dotenv import load_dotenv
 from agent.tools import (
     get_current_datetime_safe,
     get_calendars_info_safe,
@@ -10,6 +11,8 @@ from agent.tools import (
     delete_calendar_event_safe,
     TIMEZONE,
 )
+
+load_dotenv()
 
 model = init_chat_model("gpt-4o-mini", model_provider="openai")
 

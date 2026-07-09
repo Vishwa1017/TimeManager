@@ -1,8 +1,10 @@
 from langchain_google_community import CalendarToolkit
 from langchain_core.tools import tool
-from datetime import datetime, time
+import time
+from datetime import datetime, time as dt_time
 from zoneinfo import ZoneInfo
 import json
+import ssl
 
 TIMEZONE = "America/Toronto"
 PRIMARY_CALENDAR_ID = "viswa3388@gmail.com"
@@ -125,7 +127,15 @@ def update_calendar_event_safe(
     }
 
     print("UPDATE PAYLOAD:", payload)
-    return update_raw.invoke(payload)
+    try:
+        return update_raw.invoke(payload)
+
+    except Exception as e:
+        if "SSL" in str(e) or "RECORD_LAYER_FAILURE" in str(e):
+            print("SSL error during calendar update. Retrying once...")
+            return update_raw.invoke(payload)
+
+    raise e
 
 
 @tool

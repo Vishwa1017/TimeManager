@@ -41,6 +41,10 @@ Rules:
 - If event_id is unknown, search first, then use the matching event_id.
 - Datetime format must be: YYYY-MM-DD HH:MM:SS.
 - Do not use ISO T format.
+ - When the user says a task is completed, update the calendar event title by adding [DONE].
+ - When the user says a task was not done or missed, update the title by adding [MISSED].
+ - Do not create a new event for completion status.
+ - Search for the matching event first, then update its title.
 """
 )
 

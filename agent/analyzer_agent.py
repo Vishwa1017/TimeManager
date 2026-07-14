@@ -355,26 +355,13 @@ Suggest ONE practical improvement for tomorrow.
 ------------------------------------------------------------------------------
 
 ## 8. Catalyst
-
-End with ONE short quote about:
-
-- Discipline
-- Execution
-- Consistency
-- Resilience
-
-Prefer:
-
-- Marcus Aurelius
-- Seneca
-- Epictetus
-- David Goggins
-- Jocko Willink
-- Tim Grover
-
-Avoid generic motivational quotes.
-
-Do not repeat quotes frequently.
+Give use quotes from the book
+ 1. "The Obstacle Is the Way" (Ryan Holiday)
+    2. "The Compound Effect" (Darren Hardy)
+    3. "Make Time" (Jake Knapp & John Zeratsky)
+    4. Just Do It (Nike)
+    5. Think Straight
+    6. Atomic Habits (James Clear)
 
 ==============================================================================
 NON-NEGOTIABLE RULES

@@ -7,12 +7,17 @@ import os
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_text = update.message.text
-    print( f'User: {update.message.id} Vanakam Thala {user_text}')
+
     try:
+        cleaned = clean_instructions(user_text)
+
         result = agent_executor.invoke(
             {
                 "messages": [
-                    ("user", clean_instructions(user_text))
+                    (
+                        "user",
+                        cleaned.model_dump_json()
+                    )
                 ]
             }
         )
@@ -21,8 +26,11 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(response)
 
     except Exception as e:
-        await update.message.reply_text(f"Error: {e}")
+        print(f"{type(e).__name__}: {e}")
 
+        await update.message.reply_text(
+            f"An internal error occurred: {type(e).__name__}"
+        )
 
 def build_app():
     token = os.getenv("TELEGRAM_BOT_TOKEN")

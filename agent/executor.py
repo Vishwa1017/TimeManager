@@ -11,6 +11,8 @@ from agent.tools import (
     delete_calendar_event_safe,
     TIMEZONE,
 )
+from langgraph.checkpoint.memory import InMemorySaver
+from agent.memory import checkpointer
 
 load_dotenv()
 
@@ -45,7 +47,8 @@ Rules:
  - When the user says a task was not done or missed, update the title by adding [MISSED].
  - Do not create a new event for completion status.
  - Search for the matching event first, then update its title.
-"""
+""",
+    checkpointer=InMemorySaver()
 )
 
-thread_config = {"configurable": {"thread_id": "1"}}
+

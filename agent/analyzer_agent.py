@@ -7,7 +7,8 @@ from agent.tools import (
     search_calendar_events,
     TIMEZONE,
 )
-
+from langgraph.checkpoint.memory import InMemorySaver
+from agent.memory import checkpointer
 
 load_dotenv()
 
@@ -408,7 +409,8 @@ analyzer_agent_executor = create_agent(
         get_calendars_info_safe,
         search_calendar_events,
     ],
-    system_prompt=system_prompt
+    system_prompt=system_prompt,
+    checkpointer = InMemorySaver()
 )
-thread_config = {"configurable": {"thread_id": "1"}}
+
 

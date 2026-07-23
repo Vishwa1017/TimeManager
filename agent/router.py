@@ -2,6 +2,7 @@ from pydantic import BaseModel, Field
 from langchain.chat_models import init_chat_model
 from dotenv import load_dotenv
 from typing import Literal
+from agent.memory import checkpointer
 
 load_dotenv()
 
